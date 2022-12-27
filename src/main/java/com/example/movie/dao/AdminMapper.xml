@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<!--
+    xml标志：我们是一个标准xml文件，
+    version：版本号
+    encoding：整个文件编码格式
+    mapper：文件的开始标签
+    PUBLIC：公共资源
+    "-//mybatis.org//DTD Mapper 3.0//EN"：我们使用的标准由mybatis提供
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd"：标签对的规定
+    mapper：所有元素的根标签
+    namespace：命名空间对应我们的接口名称，并且为全路径名
+    select：查询语句标签
+    id=findall：执行的方法名称
+    resultType；返回值的类型
+    parameterType="":参数的类型
+-->
+<mapper namespace="com.example.movie.dao.AdminMapper">
+    <select id="findAll"
+            resultType="com.example.movie.pojo.Admin">
+        select id,name,pwd,tel,status from tb_admin
+    </select>
+    <insert id="addAdmin" parameterType="java.util.List">
+        insert into tb_admin VALUES (null,#{name},#{pwd},#{tel},#{status})
+    </insert>
+    <select id="findAdmin" parameterType="com.example.movie.pojo.Admin" resultType="com.example.movie.pojo.Admin">
+        select id,name,pwd,tel,status from tb_admin where name = #{name} and pwd = #{pwd}
+    </select>
+</mapper>

@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <title>后台-管理员登录</title>
+
+
+</head>
+<body>
+<!-- id 设置成app很重要-->
+    <div id="app">
+        <h4>后台登录</h4>
+        <!--span没有样式的区别等，红色字体通常用于回错显示，此处用于回显登录失败，双括号括起来的值用于显示信息-->
+        <span style="color: red;font-size: 14px;">{{errmsg}}</span>
+        <form action="" method="post">
+            <label>
+                <div class="label-text">账号</div>
+                <input type="text" name="name" v-model="admin.name">
+            </label>
+            <br>
+            <label>
+                <div class="label-text">密码</div>
+                <input type="password" name="name" v-model="admin.pwd">
+            </label>
+            <br>
+            <button type="button" @click="login">登录</button>
+        </form>
+    </div>
+    <script src="js/vue.js"></script>
+    <script src="js/axios.min.js"></script>
+    <script>
+        const app = new Vue({
+            /*el就是element，找一个id叫app的元素*/
+            el:"#app",
+            /*数据处理,是我们从前端定义的变量的提现*/
+            data:{
+                errmsg:'',
+                admin: {},
+            },
+            methods:{
+                /*定义一个方法用于接收点击触发之后的事情*/
+                login(){
+                    console.info(this.admin);
+                    axios.post("http://localhost:9999/movie/admin/login",this.admin)
+                        .then((res)=>{
+                            console.info(res.data);
+                            // if (res.data !==''){
+                            //     alert("登陆成功，跳转主页面");
+                            //     location.href="index.html";
+                            // }else{
+                            //     this.errmsg = "用户名或者密码错误";
+                            // }
+                            //逻辑判断已经交给后端了，前端只需要判断返回的方法是否正确
+                            if(res.data.success){
+                                location.href="index.html";
+                            }else{
+                                this.errmsg = res.data.message;
+                            }
+                        })
+                }
+            }
+
+        })
+
+    </script>
+</body>
+</html>

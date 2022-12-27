@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>电影排片</title>
+    <link rel="stylesheet" href="../css/bootstrap.min.css">
+    <link rel="stylesheet" href="../font-awesome-4.7.0/css/font-awesome.css">
+</head>
+<body>
+<div class="container">
+    <div class="page-header">
+        <h2 class="text-center text-primary">新增电影排片</h2>
+    </div>
+    <!--vue主要内容区域-->
+    <div id="app">
+        <form action="" method="post">
+            <div class="form-group row">
+                <div class="col-12 text-center text-danger">
+                    {{errMsg}}
+                </div>
+            </div>
+            <!--电影名称-->
+            <div class="form-group row">
+                <label for="movie_id" class="col-2 offset-2 col-form-label text-right">电影名称</label>
+                <div class="col-6">
+                    <select class="form-control" id="movie_id" v-model="plan.movie_id">
+                        <option v-for="movie in movieList" :key="movie.id" :value="movie.id">
+                            {{movie.name}}
+                        </option>
+                    </select>
+                </div>
+            </div>
+
+            <!--影厅名称-->
+            <div class="form-group row">
+                <label for="hall_id" class="col-2 offset-2 col-form-label text-right">影厅名称</label>
+                <div class="col-6">
+                    <select class="form-control" id="hall_id" v-model="plan.hall_id">
+                        <option v-for="hall in hallList" :key="hall.id" :value="hall.id">
+                            {{hall.name}}
+                        </option>
+                    </select>
+                </div>
+            </div>
+
+            <!--放映时间-->
+            <div class="form-group row">
+                <label for="playtime" class="col-2 offset-2 col-form-label text-right">放映时间</label>
+                <div class="col-6">
+                    <input type="datetime-local" class="form-control" id="playtime" v-model="plan.playtime">
+                </div>
+            </div>
+
+            <!--电影票价-->
+            <div class="form-group row">
+                <label for="price" class="col-2 offset-2 col-form-label text-right">电影票价</label>
+                <div class="col-6">
+                    <input type="text" class="form-control" id="price" v-model="plan.price">
+                </div>
+            </div>
+
+            <!--添加排片的按钮-->
+            <div class="form-group row">
+                <div class="col-6 offset-4">
+                    <button type="button" class="form-control btn btn-primary" id="addBtn" @click="addPlan">添加</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+<script src="../js/jquery-3.3.1.js"></script>
+<script src="../js/vue.js"></script>
+<script src="../js/axios.min.js"></script>
+<script src="../js/bootstrap.min.js"></script>
+<script src="../js/bootstrap.bundle.js"></script>
+<script>
+    var app=new Vue({
+        el:"#app",
+        data:{
+            hallList:[],
+            movieList:[],
+            plan:{
+                movie_id,
+            },
+            errMsg:'',
+        },
+        created(){
+            this.findAllHall();
+            this.findAllMovie();
+        },
+        methods:{
+            findAllMovie(){
+                axios.get("http://localhost:9999/movie/movie/findAllMovie")
+                    .then((res)=>{
+                       this.movieList=res.data;
+                       this.plan.movie_id=this.movieList[0].id;
+                    });
+            },
+            findAllHall(){
+                axios.get("http://localhost:9999/movie/hall/findUsableHall")
+                    .then((res)=>{
+                        console.info("-----"+res);
+                        this.hallList=res.data;
+                        console.info("--------"+this.hallList[0]);
+                        console.info("--------"+this.hallList[0].id);
+                        this.plan.movie_id=this.movieList[0].id;
+                    });
+            },
+            addPlan(){
+                axios.post("http://localhost:9999/movie/plan/addPlan",this.plan)
+                    .then((res)=>{console.info(res)})
+            }
+        }
+    })
+</script>
+</body>
+</html>

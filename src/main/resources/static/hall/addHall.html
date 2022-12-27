@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>添加影厅信息的页面</title>
+  <link rel="stylesheet" href="../css/bootstrap.min.css">
+  <link rel="stylesheet" href="../font-awesome-4.7.0/css/font-awesome.css">
+</head>
+<body>
+<!--
+    访问这个页面的地址应该是:
+    http://localhost:9999  /movie/       hall        /addHall.html
+    网络协议 服务器地址 端口号 项目名 static中的文件夹名称   文件夹中的页面
+-->
+<!--这里是一个布局容器让我们原来所有元素都占整个宽度的样式进行适应改变,只占中间一部分-->
+<div class="container">
+  <!--标题-->
+  <div class="page-header">
+    <!--text-center:文字居中 text-primary:给字体添加颜色-->
+    <h2 class="text-center text-primary">添加影厅</h2>
+  </div>
+  <!-- 设置vue范围 -->
+  <div id="app">
+    <!--表单区域-->
+    <form action="" method="post">
+      <!--影厅名称 form-group:表单控件组件 row以行的形式写-->
+      <div class="form-group row ">
+        <!--标签-->
+        <!--label的for的值和input输入框中id值进行绑定-->
+        <!--col-2:将我们的屏幕分成12竖份,然后标题占两份  col-form-label:表单提示符的使用-->
+        <label for="name" class="col-2 col-form-label text-right">
+          影厅名称
+        </label>
+        <!--col-10:屏幕分成12份占10份 form-control:表单中对input输入框进行修饰-->
+        <div class="col-10">
+          <input type="text" class="form-control" id="name" v-model="hall.name">
+        </div>
+      </div>
+
+      <!--影厅座位-->
+      <!--一个输入框表示一行元素,每行显示多少个座位是输入框中的数字-->
+      <div class="form-group row">
+        <!--名称-->
+        <label for="seats" class="col-2 col-form-label text-right">
+          影厅座位
+        </label>
+        <!--输入框的位置-->
+        <div class="col-8">
+          <!--每一行的元素使用列表进行处理 list-unstyled:取消列表本身自带的样式-->
+          <ul id="seats_ul" class="list-unstyled">
+            <!--每一个列表项 key是主要识别标识 index:是每一行的标号-->
+            <li class="row" v-for="(row,index) in rowCounter" :key="index">
+              <!--外面的12份分了8份个中间确定内容的区域,然后8份的空间再分成12份,
+              其中8分用来表示我们每一排有多少个座位-->
+              <div class="col-8">
+                <select class="form-control seat_row">
+                  <option v-for="i in 12" :key="i" :value="i">
+                    {{i}}
+                  </option>
+                </select>
+              </div>
+              <!--用来控制这一行是否删除的按钮的部分-->
+              <div class="col-2">
+                <!--btn-danger:红色按钮-->
+                <!--delRow:点击按钮触发删除这一行信息的方法 index:获取到这一行的标识-->
+                <button type="button" class="btn btn-danger" @click="delRow(index)">
+                  <!--引用了上面的字体包,在字体包的部分,显示一个圆的减号-->
+                  <i class="fa fa-minus-circle"></i>
+                </button>
+              </div>
+            </li>
+          </ul>
+        </div>
+        <!--加每一排按钮的位置-->
+        <div class="col-2">
+          <!--addRow:点击触发加1行的方法-->
+          <button type="button" class="btn btn-primary" @click="addRow">
+            <!--加一行的字体图标-->
+            <i class="fa fa-plus-circle">增加行</i>
+          </button>
+        </div>
+      </div>
+      <!--影厅添加的按钮-->
+      <div class="form-group row">
+        <div class="col-3 offset-2">
+          <!--添加影厅的方法addHall-->
+          <button type="button"
+                  class="form-control btn btn-primary"
+                  @click="addHall">
+            添加
+          </button>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>
+<!--js文件导入-->
+<!--jquery是js框架的包-->
+<script src="../js/jquery-3.3.1.js"></script>
+<!--vue页面的包-->
+<script src="../js/vue.js"></script>
+<!--vue数据绑定处理的包-->
+<script src="../js/axios.min.js"></script>
+<!--前端框架bootstrap的js包-->
+<script src="../js/bootstrap.min.js"></script>
+<!--前端框架bootstrap中使用的字体以及图标的包-->
+<script src="../js/bootstrap.bundle.js"></script>
+<script>
+  var app = new Vue({
+    el:"#app",
+    data:{
+      hall:{},
+      rowCounter:[{},{}], //行的计数器，默认两行，因为数组中有两个元素，使用for循环进行遍历
+      },
+    methods:{
+      addRow(){
+        this.rowCounter.push({});
+      },
+      delRow(index){
+        this.rowCounter.splice(index,1);
+      },
+      addHall(){
+        var seats_arr=[];
+        $(".seat_row").each(function(index,ele){
+          var colSize = parseInt($(this).val());
+          var temp=[];
+          for(var i=0;i<colSize;i++){
+            temp.push(0);
+          }
+          seats_arr.push(temp);
+        });
+        this.hall.seats = JSON.stringify(seats_arr);
+        console.info(this.hall);
+      axios.post("http://localhost:9999/movie/hall/addHall",this.hall).then((res)=>{console.info(res)})
+      }
+    }
+  })
+</script>
+</body>
+</html>

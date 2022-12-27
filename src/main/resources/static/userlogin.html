@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>用户登录</title>
+
+
+  <!--
+      如果导入的文件是一个文件夹不是一个包文件形式右键点中resources目录,
+      右键找到mark directory as 设置成为resources root
+  -->
+</head>
+<body>
+<!--设置我们要处理的前端元素的最外层文件-->
+<!--这里的id设置成为app很重要-->
+<div id="app">
+  <h4>用户登录</h4>
+  <!--span标签本身并没有任何的样式和初始的高度宽度,
+  我们一般用来进行文字提醒的使用-->
+  <span style="color: red;font-size: 14px;">
+            <!--当我们的登录信息写的是错误的时候,显示红色字体告诉我
+            信息错误,双括号括起来的东西,就是用来显示信息的-->
+            {{errmsg}}
+        </span>
+  <!--
+      action="":在原来的web项目中写的是controller中响应的地址
+      通过js将我们要响应的信息传输到后台去,所以action里面不写值
+      method:提交信息的方式
+      post:向服务器发送请求,进行数据的修改
+      get:用来获取资源,只获取资源,查询数据
+      v-model:是vue里面的语法,用来绑定输入框,并且获取到输入框中的内容
+      @click="login":绑定到一个方法一会js里面写方法,当按钮触发之后方法
+      就就会执行,方法的名称就是login
+  -->
+  <form action="" method="post">
+    <label>
+      <div class="label-text">账号</div>
+      <input type="text" name="name" v-model="user.username">
+    </label>
+    <br>
+    <label>
+      <div class="label-text">密码</div>
+      <input type="password" name="password" v-model="user.password">
+    </label>
+    <br>
+    <button type="button" @click="login">登录</button>
+  </form>
+</div>
+
+<!--导入我们需要使用的js文件-->
+<!--这个是vue的js文件,这是所有的vue项目的支持-->
+<script src="js/vue.js"></script>
+<!--这个是用来处理vue中js的数据信息的-->
+<script src="js/axios.min.js"></script>
+<!--这个是我们自己写js的文件引用-->
+<script>
+  /*创建一个vue对象*/
+  const app = new Vue({
+    /*el就是element,找到一个id叫app的元素*/
+    el:"#app",
+    /*数据处理,是我们从前端定义的变量的体现*/
+    data:{
+      /*我们创建了一个admin对象,然后上面name和pwd信息一会就存在对象里面*/
+      user:{},
+      /*这是一个字符串信息,上面用来提示是否登录成功的信息就在这里*/
+      errmsg:''
+    },
+    /*定义我们在登录的时候需要使用的方法*/
+    methods:{
+      /*定义一个方法用来接收点击触发之后的事情*/
+      login(){
+        /*打印一下上面的admin里面到底拿到我们输入的值了没有*/
+        /*this表示本类,admin是上面我们创建的对象*/
+        console.info(this.user);
+        //向后台发送数据请求,将我们输入在输入框中的信息发送到后台去确认
+        //axios:发送数据的格式
+        //post:提交方式
+        //三个参数:
+        //http://localhost:9999/movie/admin/login:我们要想controller
+        //中的哪个方法传值
+        //this.admin:就是data中的admin对象,里面存储了我们输入的账号和密码
+        //res:固定格式,用来进行页面信息的显示和跳转
+        axios.post("http://localhost:9999/movie/user/userlogin"
+                ,this.user)
+                .then((res)=>{
+                  //打印出当前的data里面的信息,就是从login中有没有穿回来对象
+                  console.info(res.data);
+                  //判断对象是否存在,因为我们输入了账号和密码过去,
+                  //在数据库里面进行寻找,如果有对象就返回了,没有找到就没有返回
+                  if(res.data != ''){
+                    //弹窗处理
+                    alert("登陆成功,跳转到主页面");
+                    //跳转页面
+                    location.href="index.html";
+                  }else{
+                    //给上面的信息提示尽心赋值,然后再errmsg中进行显示
+                    this.errmsg = "用户名或者密码错误";
+                  }
+                });
+      }
+    }
+  })
+</script>
+</body>
+</html>

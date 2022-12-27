@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>添加影厅信息</title>
+</head>
+<body>
+  <div id = "app">
+      <p>{{errmsg}}</p>
+      <label>
+          name
+          <input type="text" v-model="hall.name">
+      </label>
+      <br>
+      <label>
+          seats
+          <input type="text" v-model="hall.seats">
+      </label>
+      <button @click="sub">提交</button>
+
+  </div>
+  <script src="js/vue.js"></script>
+  <script src="js/axios.min.js"></script>
+  <script>
+      const app = new Vue({
+          el: "#app",
+          data: {
+              hall:{
+                  name: "",
+                  seats: "",
+              },
+              errmsg:"",
+
+          },
+          methods: {
+              sub(){
+                  if (this.hall.name!==""&&this.hall.seats!==""){
+                      axios.post("http://localhost:9999/movie/hall/addHall"
+                          , this.hall).then((res) => {
+                              console.info(res.data);
+                              if (res.data.success) {
+                                  this.errmsg= res.data.message;
+                              } else {
+                                  this.errmsg = res.data.message;
+                              }
+                          }
+                      )
+                  }else {
+                      alert("空的")
+                  }
+
+              }
+          }
+      });
+  </script>
+</body>
+</html>

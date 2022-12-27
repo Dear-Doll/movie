@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.example.movie.dao.UserMapper">
+    <insert id="userReg" parameterType="com.example.movie.pojo.User">
+        INSERT into tb_user(username,password,truename,usersex,usertel)VALUES(#{username},#{password},#{truename},#{usersex},#{usertel})
+    </insert>
+    <select id="userLogin" resultType="com.example.movie.pojo.User"
+            parameterType="com.example.movie.pojo.User">
+        select  id,username,password,usersex,usertel,userstatus from tb_user where username=#{username} and password =#{password}
+    </select>
+</mapper>

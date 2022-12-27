@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>后台管理-添加影片</title>
+    <link rel="stylesheet" href="../css/bootstrap.min.css">
+    <link rel="stylesheet" href="../font-awesome-4.7.0/css/font-awesome.css">
+    <style type="text/css">
+        #div-upload {
+            width: 80px;
+        }
+        #img_show {
+            width: 120px;
+            height: 150px;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <!--标题-->
+    <div class="page-header">
+        <h2 class="text-center text-primary">电影信息</h2>
+    </div>
+    <!--表单-->
+    <div id="app">
+        <form action="" method="post">
+            <!--电影名称-->
+            <div class="form-group row">
+                <label for="name" class="col-2 col-form-label text-right">影片名称</label>
+                <div class="col-10">
+                    <input type="text" class="form-control" id="name" v-model="movie.name">
+                </div>
+            </div>
+            <!--电影封面-->
+<!--            <div class="form-group row">-->
+<!--                <label for="imgfile" class="col-2 col-form-label text-right">影片封面</label>-->
+<!--                <div class="col-10">-->
+<!--                    &lt;!&ndash;影片图片预览区域&ndash;&gt;-->
+<!--                    <img :src="imgUrl" id="img_show" v-if="imgUrl">-->
+<!--                    &lt;!&ndash;图片选择的按钮&ndash;&gt;-->
+<!--                    <div id="div-upload" @click="clickUploadDiv" class="btn btn-primary">-->
+<!--                        &lt;!&ndash;这是从我们字体库里面找的像之前添加影厅信息的每一排的提示一样,添加了一个图标进来&ndash;&gt;-->
+<!--                        <i class="fa fa-cloud-upload"></i>-->
+<!--                    </div>-->
+<!--                    &lt;!&ndash;选择要上传的文件&ndash;&gt;-->
+<!--                    <input type="file" id="imgfile" @change="changeFile($event)"-->
+<!--                           style="display: none;" ref="myFile">-->
+<!--                </div>-->
+<!--            </div>-->
+            <!-- 导演-->
+            <div class="form-group row">
+                <label for="director" class="col-2 col-form-label text-right">影片导演</label>
+                <div class="col-10">
+                    <input type="text" class="form-control" id="director" v-model="movie.director">
+                </div>
+            </div>
+            <!-- 编剧-->
+            <div class="form-group row">
+                <label for="writer" class="col-2 col-form-label text-right">影片编剧</label>
+                <div class="col-10">
+                    <input type="text" class="form-control" id="writer" v-model="movie.writer">
+                </div>
+            </div>
+            <!-- 主演-->
+            <div class="form-group row">
+                <label for="actor" class="col-2 col-form-label text-right">影片主演</label>
+                <div class="col-10">
+                    <input type="text" class="form-control" id="actor" v-model="movie.actor">
+                </div>
+            </div>
+            <!-- 类型-->
+            <div class="form-group row">
+                <label for="type" class="col-2 col-form-label text-right">影片类型
+                </label>
+                <div class="col-10">
+                    <input type="text" class="form-control" id="type" v-model="movie.type">
+                </div>
+            </div>
+            <!--制片国家/地区-->
+            <div class="form-group row">
+                <label for="area" class="col-2 col-form-label text-right">国家/地区</label>
+                <div class="col-10">
+                    <input type="text" class="form-control" id="area" v-model="movie.area">
+                </div>
+            </div>
+            <!-- 语言-->
+            <div class="form-group row">
+                <label for="language" class="col-2 col-form-label text-right">影片语言</label>
+                <div class="col-10">
+                    <input type="text" class="form-control" id="language" v-model="movie.language">
+                </div>
+            </div>
+            <!-- 上映时间-->
+            <div class="form-group row">
+                <label for="showtime" class="col-2 col-form-label text-right">上映时间</label>
+                <div class="col-10">
+                    <input type="date" class="form-control" id="showtime" v-model="movie.showtime">
+                </div>
+            </div>
+            <!-- 影片片长-->
+            <div class="form-group row">
+                <label for="length" class="col-2 col-form-label text-right">影片时长</label>
+                <div class="col-10">
+                    <input type="text" class="form-control" id="length" v-model="movie.length">
+                </div>
+            </div>
+            <!-- IMDb链接-->
+            <div class="form-group row">
+                <label for="link" class="col-2 col-form-label text-right">IMDb链接</label>
+                <div class="col-10">
+                    <input type="text" class="form-control" id="link" v-model="movie.link">
+                </div>
+            </div>
+            <!-- 影片描述-->
+            <div class="form-group row">
+                <label for="description" class="col-2 col-form-label text-right">影片描述</label>
+                <div class="col-10">
+                <textarea class="form-control" id="description" v-model="movie.description" rows="4"
+                          placeholder="请输入影片描述信息">
+                </textarea>
+                </div>
+            </div>
+            <!-- 添加影片按钮 -->
+            <div class="form-group row">
+                <div class="col-3 offset-2">
+                    <button type="button" class=" form-control btn btn-primary" id="addBtn"
+                            @click="addMovie">添加
+                    </button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script src="../js/jquery-3.3.1.js"></script>
+<script src="../js/vue.js"></script>
+<script src="../js/axios.min.js"></script>
+<script src="../js/bootstrap.min.js"></script>
+<script src="../js/bootstrap.bundle.js"></script>
+<script>
+    var app = new Vue({
+        el:"#app",
+        data:{
+            errmsg:{},
+            movie:{},
+        },
+        methods:{
+            addMovie(){
+                axios.post("http://localhost:9999/movie/movie/addMovie",this.movie)
+                    .then((res)=>{console.info(res)})
+            }
+        }
+    })
+</script>
+</body>
+</html>

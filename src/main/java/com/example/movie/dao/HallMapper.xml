@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<!--关于影厅处理的xml文件-->
+<mapper namespace="com.example.movie.dao.HallMapper">
+<!--    <select id=""></select>-->
+<!--    <insert id=""></insert>-->
+<!--    <delete id=""></delete>-->
+<!--    <update id=""></update>-->
+    <!--添加影厅信息-->
+    <insert id="save">
+        /*子接口的实现文件可以直接找到父接口定义的方法*/
+        insert into tb_hall(id,name,seats,status)
+        values(#{id},#{name},#{seats},#{status})
+    </insert>
+    <select id="findAll" resultType="com.example.movie.pojo.Hall">
+        select * from tb_hall
+    </select>
+</mapper>
