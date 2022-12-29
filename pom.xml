@@ -73,6 +73,12 @@
             <artifactId>druid</artifactId>
             <version>1.2.15</version>
         </dependency>
+        <!-- 文件上传相关 -->
+        <dependency>
+            <groupId>commons-io</groupId>
+            <artifactId>commons-io</artifactId>
+            <version>2.6</version>
+        </dependency>
     </dependencies>
 
     <!--插件-->

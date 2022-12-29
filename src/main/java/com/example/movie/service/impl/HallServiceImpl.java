@@ -37,4 +37,16 @@ public class HallServiceImpl implements HallService {
     public List<Hall> findAll() {
         return hallMapper.findAll();
     }
+
+    @Override
+    public List<Hall> findByPage(Integer pageNum, Integer pageSize) {
+        int start = (pageNum-1)*pageSize;
+        int rows = pageSize;
+        return hallMapper.findByPage(start,rows);
+    }
+
+    @Override
+    public Integer findTotals() {
+        return hallMapper.findTotals();
+    }
 }

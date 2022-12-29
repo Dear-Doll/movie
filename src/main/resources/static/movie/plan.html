@@ -79,9 +79,7 @@
         data:{
             hallList:[],
             movieList:[],
-            plan:{
-                movie_id,
-            },
+            plan:{},
             errMsg:'',
         },
         created(){
@@ -103,7 +101,7 @@
                         this.hallList=res.data;
                         console.info("--------"+this.hallList[0]);
                         console.info("--------"+this.hallList[0].id);
-                        this.plan.movie_id=this.movieList[0].id;
+                        //this.plan.movie_id=this.movieList[0].id;
                     });
             },
             addPlan(){

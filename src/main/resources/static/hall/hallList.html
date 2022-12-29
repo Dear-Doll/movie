@@ -1,10 +1,124 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="zh">
+
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>影厅列表</title>
+    <link rel="stylesheet" href="../css/bootstrap.min.css">
+    <link rel="stylesheet" href="../font-awesome-4.7.0/css/font-awesome.min.css">
 
+    <script src="../js/jquery-3.3.1.js"></script>
+    <script src="../js/vue.js"></script>
+    <script src="../js/axios.min.js"></script>
+    <script src="../js/bootstrap.min.js"></script>
+    <script src="../js/bootstrap.bundle.js"></script>
+</head>
+
+<body>
+<div id="app" class="container">
+    <div class="page-header">
+        <h2 class="text-center text-primary">影厅列表</h2>
+    </div>
+    <table class="table table-bordered text-center">
+        <thead>
+            <tr>
+                <th scope="col">编号</th>
+                <th scope="col">名称</th>
+                <th scope="col">座位</th>
+                <th scope="col">操作</th>
+            </tr>
+        </thead>
+        <tbody>
+        <tr v-for="h in hall" :key="h.id">
+            <td v-text="h.id"></td>
+            <td v-text="h.name"></td>
+            <td class="text-left">
+                <div v-for="j,index in h.seats" class="border m-2 p-2 border-info rounded">
+                    第{{index+1}}排:
+                    <span v-for="x in j">
+                                <span v-if="x==0" class="badge badge-success  m-2">空</span>
+                                <span v-if="x==1" class="badge badge-danger m-2">满</span>
+                            </span>
+                </div>
+            </td>
+
+            <td>
+                <a href="#">修改</a>
+                <a href="#">删除</a>
+
+            </td>
+        </tr>
+        </tbody>
+    </table>
+
+    <nav>
+    <ul class="pagination">
+        <li class="page-item" :class="{'disabled':pageNum==1}">
+            <a class="page-link" href="#" @click="findall(pageNum-1)">
+                <span>&laquo;</span>
+            </a>
+        </li>
+        <li class="page-item" v-for="indexPage in totalPage"
+        :key="indexPage" :class="{'active':pageNum == indexPage}">
+            <a class="page-link" href="#" @click ="findall(indexPage)">
+                {{indexPage}}
+            </a>
+        </li>
+        <li class="page-item" :class="{'disabled':pageNum==totalPage}">
+            <a class="page-link" href="#" @click="findall(pageNum+1)">
+                <span>&raquo;</span>
+            </a>
+        </li>
+    </ul>
+    </nav>
+</div>
 </body>
+<script>
+    const app = new Vue({
+        el: "#app",
+        data: {
+            hall: [],
+            s: [],
+            pageNum:1,
+            pageSize:3,
+            totalPage:0,
+            totals:0,
+        },
+        created: function () {
+            this.findall(1)
+        },
+        mounted() {
+
+        },
+        methods: {
+            findall(indexPage) {
+                console.info(indexPage);
+                if(indexPage){
+                    this.pageNum = indexPage;
+                }
+                axios.get("http://localhost:9999/movie/hall/findByPage?pageNum="
+                    +this.pageNum+"&pageSize="+this.pageSize)
+                    .then((res) => {
+                        console.info(res.data);
+                            //this是当前html，也就是将res传过来的data中的内容赋值给当前页面中的对应内容
+                            this.hall = res.data.hallList;
+                            this.pageNum = res.data.pageNum;
+                            this.totalPage = res.data.totalPage;
+                            this.totals = res.data.totals;
+                            //this.hall = res.data
+                            for (let i = 0; i < this.hall.length; i++) {
+                                this.hall[i].seats = eval(this.hall[i].seats)
+                            }
+
+                    }
+                )
+            },
+
+        }
+    });
+
+</script>
+
 </html>

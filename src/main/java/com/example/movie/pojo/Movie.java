@@ -1,8 +1,10 @@
 package com.example.movie.pojo;
 
 import lombok.Data;
+import org.springframework.format.annotation.DateTimeFormat;
 
-import java.sql.Timestamp;
+import java.util.Date;
+
 
 @Data
 public class Movie {
@@ -16,7 +18,9 @@ public class Movie {
     private String type;
     private String area;
     private String language;
-    private Timestamp showtime;
+    //时间格式化注解
+    @DateTimeFormat(pattern="yyyy-MM-dd")
+    private Date showtime;
     private String length;
     private double grade;
     private Integer status;

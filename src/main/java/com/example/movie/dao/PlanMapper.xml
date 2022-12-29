@@ -2,6 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.example.movie.dao.PlanMapper">
     <insert id="save">
-        insert into tb_hall(id,name,seats,status) values (#{id},#{name},#{seats},#{status})
+        insert into tb_plan(id,playtime,price,seats,status,hall_id,movie_id)
+        values (#{id},#{playtime},#{price},#{seats},#{status},#{hall_id},#{movie_id})
     </insert>
 </mapper>
